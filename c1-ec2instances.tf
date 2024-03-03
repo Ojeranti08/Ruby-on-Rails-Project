@@ -65,7 +65,7 @@ resource "aws_instance" "RailDocker" {
     docker-compose up --build
   EOF
 
-  private_ip             = "10.0.1.18"
+  private_ip = "10.0.1.18"
 
   tags = {
     Name = "Rail-Docker"
