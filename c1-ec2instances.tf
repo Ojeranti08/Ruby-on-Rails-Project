@@ -95,7 +95,8 @@ resource "aws_instance" "RailDocker" {
     # Start the server by default, this can be overwritten at runtime
     EXPOSE 3000
     CMD ["./bin/Rails", "server"]
-
+   
+   
     vi Gemfile
       user_data            = <<-EOF
       # Gemfile
