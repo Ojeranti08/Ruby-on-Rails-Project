@@ -120,17 +120,18 @@ resource "aws_instance" "RailDocker" {
     
     # Change directory to rails-docker
     cd /home/ec2-user/Ruby-on-Rails-Project/rails-docker
+    rm -f Gemfile
 
-    # Move the files from Ruber-on-Rails-Project to the correct location (rails-docker) 
-    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile .
-    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile .
-    sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml .
-    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL .
+    # Copy the files from Ruber-on-Rails-Project to the correct location (rails-docker) 
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile /home/ec2-user/Ruby-on-Rails-Project/rails-docker
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile /home/ec2-user/Ruby-on-Rails-Project/rails-docker
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml /home/ec2-user/Ruby-on-Rails-Project/rails-docker
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL /home/ec2-user/Ruby-on-Rails-Project/rails-docker
     sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint /home/ec2-user/Ruby-on-Rails-Project/rails-docker/bin
     sudo cp /home/ec2-user/Ruby-on-Rails-Project/database.yaml /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
     sudo cp /home/ec2-user/Ruby-on-Rails-Project/routes.rb /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
-    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock ..
-    sudo cp /home/ec2-user/Ruby-on-Rails-Project/data-ignore .
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock /home/ec2-user/Ruby-on-Rails-Project/rails-docker
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/data-ignore /home/ec2-user/Ruby-on-Rails-Project/rails-docker
 
     # Change directory to Ruby-on-Rails-Project
     cd /home/ec2-user/Ruby-on-Rails-Project
