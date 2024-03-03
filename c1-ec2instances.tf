@@ -120,7 +120,7 @@ resource "aws_instance" "RailDocker" {
     
     # Change directory to rails-docker
     cd /home/ec2-user/Ruby-on-Rails-Project/rails-docker
-    rm -rf Gemfile
+    sudo rm -rf Gemfile
 
     # Copy the files from Ruber-on-Rails-Project to the correct location (rails-docker) 
     sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile /home/ec2-user/Ruby-on-Rails-Project/rails-docker
