@@ -117,25 +117,26 @@ resource "aws_instance" "RailDocker" {
     
    # Change directory to Ruby-on-Rails-Project
    cd /home/ec2-user/Ruby-on-Rails-Project
-
+   
    # Change directory to rails-docker
    cd rails-docker
+   sudo chown -R ec2-user:ec2-user .
 
    # Remove Gemfile from the rails-docker directory
-   sudo rm -rf Gemfile
+   rm -rf Gemfile
  
    # Copy the files from Ruby-on-Rails-Project to the rails-docker directory
-   sudo cp ../Dockerfile .
-   sudo cp ../Gemfile .
-   sudo cp ../docker-compose.yaml .
-   sudo cp ../Dockerfile-PostgresSQL .
-   sudo cp ../docker-entrypoint bin/
-   sudo cp ../database.yaml config/
-   sudo cp ../routes.rb config/
-   sudo cp ../Gemfile.lock .
-   sudo cp ../data-ignore .
+   sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile .
+   sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile .
+   sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml .
+   sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL .
+   sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint bin/
+   sudo cp /home/ec2-user/Ruby-on-Rails-Project/database.yaml config/
+   sudo cp /home/ec2-user/Ruby-on-Rails-Project/routes.rb config/
+   sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock .
+   sudo cp /home/ec2-user/Ruby-on-Rails-Project/data-ignore .
 
-    sudo chown -R ec2-user:ec2-user .
+   #sudo chown -R ec2-user:ec2-user .
 
    # Change directory to Ruby-on-Rails-Project
    cd /home/ec2-user/Ruby-on-Rails-Project
