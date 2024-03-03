@@ -33,8 +33,22 @@ resource "aws_instance" "RailDocker" {
     # Install Ruby development headers (necessary for building certain Ruby gems)
     sudo yum install ruby-devel -y 
 
+    # Set GEM_HOME and GEM_PATH
+    echo 'export GEM_HOME=$HOME/.local/share/gem/ruby' >> ~/.bashrc
+    echo 'export GEM_PATH=$GEM_HOME:/usr/share/ruby3.2-gems:/usr/share/gems:/usr/local/share/ruby3.2-gems:/usr/local/share/gems' >> ~/.bashrc
+
+    # Add Ruby gems binary directory to PATH
+    echo 'export PATH=$PATH:$GEM_HOME/bin' >> ~/.bashrc
+    source ~/.bashrc 
+
     # Install Rails (without -y flag, as gem install doesn't accept it)
-    gem install rails
+    sudo yum remove ruby -y
+    sudo yum remove ruby-devel -y
+    sudo yum remove rubygems -y
+    sudo yum install ruby -y
+    sudo yum install ruby-devel -y
+    sudo yum install rubygems -y 
+    sudo gem install rails -v 7.0.4
  
     # Clone the Rails project repository
     sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
