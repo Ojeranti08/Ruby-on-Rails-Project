@@ -5,7 +5,7 @@ resource "aws_instance" "RailDocker" {
   key_name               = "Oje"
   vpc_security_group_ids = [aws_security_group.raildocker-sg.id]
   user_data              = <<-EOF
-    #!/bin/bash
+   #!/bin/bash
 
    # Update the system
    sudo yum update -y
