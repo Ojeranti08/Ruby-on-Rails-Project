@@ -6,6 +6,8 @@ resource "aws_instance" "RailDocker" {
   vpc_security_group_ids = [aws_security_group.raildocker-sg.id]
   user_data              = <<-EOF
     #!/bin/bash
+
+    # Update the System & Install Git & Docker
     sudo yum update -y
     sudo yum -y install git docker
 
@@ -19,18 +21,37 @@ resource "aws_instance" "RailDocker" {
     sudo systemctl start docker
     sudo systemctl enable docker
 
-    # Install Ruby and RubyGems
-    sudo yum -y install  ruby ruby-devel
+    # Install Ruby, RubyGems, Ruby-Devel & Development Tools
+    sudo yum -y install ruby ruby-devel rubygems
+    sudo yum -y groupinstall "Development Tools"
+
+    # Install Bundler and Rails
+    sudo gem install bundler rails
 
     # Clone the Rails project repository
     sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
 
     # Build and run Rails application using Docker Compose
     cd /home/ec2-user/Ruby-on-Rails-Project
-    sudo docker-compose up -d
 
     # Run docker run command to create a new Rails app
-    docker run --rm -v $(pwd):/app ruby:3.2.0 rails new . --force --database=postgresql
+    rails new rails-docker --apl --database=postgresql
+    
+    # Change directory to rails-docker
+    cd /home/ec2-user/Ruby-on-rails-project/rails-docker
+    rm -rf Dockerfile Gemfile 
+    rm -rf /home/ec2-user/Ruby-on-rails-project/rails-docker/config/database.yaml
+    rm -rf /home/ec2-user/Ruby-on-rails-project/rails-docker/config/routes.rb
+    rm -rf /home/ec2-user/Ruby-on-rails-project/rails-docker/bin/docker-entrypoint
+
+    # Move the files from Ruber-on-rails-project to the correct location (rails-docker) 
+    mv /home/ec2-user/Ruby-on-rails-project/Dockerfile .
+    mv /home/ec2-user/Ruby-on-rails-project/Gemfile .
+    mv /home/ec2-user/Ruby-on-rails-project/docker-compose.yaml .
+    mv /home/ec2-user/Ruby-on-rails-project/dockerfile.postgres .
+    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/docker-entrypoint /home/ec2-user/Ruby-on-rails-project/rails-docker/bin
+    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/database.yaml /home/ec2-user/Ruby-on-rails-project/rails-docker/config
+    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/routes.rb /home/ec2-user/Ruby-on-rails-project/rails-docker/config
 
     # Print the master.key
     echo "RAILS_MASTER_KEY=$MASTER_KEY"
@@ -38,32 +59,12 @@ resource "aws_instance" "RailDocker" {
     # Save the master.key to a .env file
     echo "RAILS_MASTER_KEY=$MASTER_KEY" > .env
 
-    # Update database.yml
-    cat > config/database.yml <<EOL
-    default: &default
-      adapter: postgresql
-      encoding: unicode
-      pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-      username: postgres
-      password: <%= ENV['POSTGRES_PASSWORD'] %>
-      host: db
-
-    development:
-      <<: *default
-      database: myapp_development
-
-    test:
-      <<: *default
-      database: myapp_test
-
-    production:
-      <<: *default
-      database: myapp_production
-    EOL
+    rails g scaffold post title body:text
 
     # Build and run the containers
     docker-compose up --build
   EOF
+
   private_ip             = "10.0.1.18"
 
   tags = {

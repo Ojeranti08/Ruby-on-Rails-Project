@@ -1,20 +1,38 @@
-# Use the official Ruby image as the base image
-FROM ruby:3.2.0
+# Make sure it matches the Ruby version in .ruby-version and Gemfile
+ARG RUBY_VERSION=3.2.0
+FROM ruby:$RUBY_VERSION
 
-# Set the working directory in the container
-WORKDIR /app
+# Install libvips for Active Storage preview support
+RUN yum update -qq && \
+    yum install -y build-essential libvips bash bash-completion libffi-dev tzdata postgresql nodejs npm yarn && \
+    yum clean && \
+    rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man
 
-# Copy the Gemfile and Gemfile.lock into the container
+# Rails app lives here
+WORKDIR /rails
+
+# Set production environment
+ENV RAILS_LOG_TO_STDOUT="1" \
+    RAILS_SERVE_STATIC_FILES="true" \
+    RAILS_ENV="production" \
+    BUNDLE_WITHOUT="development"
+
+# Install application gems
 COPY Gemfile Gemfile.lock ./
-
-# Install dependencies using Bundler
 RUN bundle install
 
-# Copy the rest of the application code into the container
+# Copy application code
 COPY . .
 
-# Expose port 3000 to the outside world
-EXPOSE 3000
+# Precompile bootsnap code for faster boot times
+RUN bundle exec bootsnap precompile --gemfile app/ lib/
 
-# Start the Rails application
-CMD ["rails", "server", "-b", "0.0.0.0"]
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
+
+# Entrypoint prepares the database.
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+
+# Start the server by default, this can be overwritten at runtime
+EXPOSE 3000
+CMD ["./bin/rails", "server"]
