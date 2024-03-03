@@ -32,6 +32,7 @@ resource "aws_instance" "RailDocker" {
 
     # Install Ruby development headers (necessary for building certain Ruby gems)
     sudo yum install ruby-devel -y 
+    sudo yum install rubygems -y
 
     # Set GEM_HOME and GEM_PATH
     echo 'export GEM_HOME=$HOME/.local/share/gem/ruby' >> ~/.bashrc
