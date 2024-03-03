@@ -23,15 +23,13 @@ resource "aws_instance" "RailDocker" {
 
     # Install Ruby
     sudo yum -y install ruby
-
-    # Install Development Tools (optional but recommended for compiling native extensions)
     sudo yum -y groupinstall "Development Tools"
 
     # Install Bundler (without -y flag, as gem install doesn't accept it)
     gem install bundler
 
     # Install Ruby development headers (necessary for building certain Ruby gems)
-    sudo yum install ruby-devel -y 
+    sudo yum -y install ruby-devel 
 
     # Set GEM_HOME and GEM_PATH
     echo 'export GEM_HOME=$HOME/.local/share/gem/ruby' >> ~/.bashrc
@@ -46,6 +44,8 @@ resource "aws_instance" "RailDocker" {
     sudo yum remove ruby-devel -y
     sudo yum install ruby -y
     sudo yum install ruby-devel -y
+
+    # Install Rails
     sudo gem install rails -v 7.0.4
  
     # Clone the Rails Project repository
@@ -142,7 +142,7 @@ resource "aws_instance" "RailDocker" {
 
   # Change directory to Ruby-on-Rails-Project
    cd /home/ec2-user/Ruby-on-Rails-Project
-   
+
     # sudo rm -rf Dockerfile
     # sudo rm -rf Gemfile 
     # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/database.yaml
