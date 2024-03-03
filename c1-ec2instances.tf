@@ -32,7 +32,7 @@ resource "aws_instance" "RailDocker" {
 
     # Install Ruby development headers (necessary for building certain Ruby gems)
     sudo yum install ruby-devel -y 
-    #sudo yum install rubygems -y
+    sudo yum install rubygems -y
 
     # Set GEM_HOME and GEM_PATH
     echo 'export GEM_HOME=$HOME/.local/share/gem/ruby' >> ~/.bashrc
@@ -45,10 +45,10 @@ resource "aws_instance" "RailDocker" {
     # Install Rails (without -y flag, as gem install doesn't accept it)
     sudo yum remove ruby -y
     sudo yum remove ruby-devel -y
-    #sudo yum remove rubygems -y
+    sudo yum remove rubygems -y
     sudo yum install ruby -y
-    sudo yum install ruby-devel -y
-    #sudo yum install rubygems -y 
+    sudo yum install ruby-3.2.2-devel -y
+    sudo yum install rubygems -y 
     sudo gem install rails -v 7.0.4
  
     # Clone the Rails project repository
@@ -62,19 +62,21 @@ resource "aws_instance" "RailDocker" {
     
     # Change directory to rails-docker
     cd /home/ec2-user/Ruby-on-rails-project/rails-docker
-    rm -rf Dockerfile Gemfile 
-    rm -rf /home/ec2-user/Ruby-on-rails-project/rails-docker/config/database.yaml
-    rm -rf /home/ec2-user/Ruby-on-rails-project/rails-docker/config/routes.rb
-    rm -rf /home/ec2-user/Ruby-on-rails-project/rails-docker/bin/docker-entrypoint
+    #sudo rm -rf Dockerfile Gemfile 
+    #sudo rm -rf /home/ec2-user/Ruby-on-rails-project/rails-docker/config/database.yaml
+    #sudo rm -rf /home/ec2-user/Ruby-on-rails-project/rails-docker/config/routes.rb
+    #sudo rm -rf /home/ec2-user/Ruby-on-rails-project/rails-docker/bin/docker-entrypoint
 
     # Move the files from Ruber-on-rails-project to the correct location (rails-docker) 
-    mv /home/ec2-user/Ruby-on-rails-project/Dockerfile .
-    mv /home/ec2-user/Ruby-on-rails-project/Gemfile .
-    mv /home/ec2-user/Ruby-on-rails-project/docker-compose.yaml .
-    mv /home/ec2-user/Ruby-on-rails-project/dockerfile.postgres .
-    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/docker-entrypoint /home/ec2-user/Ruby-on-rails-project/rails-docker/bin
-    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/database.yaml /home/ec2-user/Ruby-on-rails-project/rails-docker/config
-    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/routes.rb /home/ec2-user/Ruby-on-rails-project/rails-docker/config
+    sudo mv /home/ec2-user/Ruby-on-rails-project/Dockerfile .
+    sudo mv /home/ec2-user/Ruby-on-rails-project/Gemfile .
+    sudo mv /home/ec2-user/Ruby-on-rails-project/docker-compose.yaml .
+    sudo mv /home/ec2-user/Ruby-on-rails-project/dockerfile.postgres .
+    sudo mv /home/ec2-user/rails-docker/Ruby-on-rails-project/docker-entrypoint /home/ec2-user/Ruby-on-rails-project/rails-docker/bin
+    sudo mv /home/ec2-user/rails-docker/Ruby-on-rails-project/database.yaml /home/ec2-user/Ruby-on-rails-project/rails-docker/config
+    sudo mv /home/ec2-user/rails-docker/Ruby-on-rails-project/routes.rb /home/ec2-user/Ruby-on-rails-project/rails-docker/config
+    sudo mv /home/ec2-user/rails-docker/Ruby-on-rails-project/.env /home/ec2-user/Ruby-on-rails-project/rails-docker
+    
 
     # Print the master.key
     echo "RAILS_MASTER_KEY=$MASTER_KEY"
