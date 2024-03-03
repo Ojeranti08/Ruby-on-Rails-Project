@@ -21,16 +21,26 @@ resource "aws_instance" "RailDocker" {
     sudo systemctl start docker
     sudo systemctl enable docker
 
-    # Install Ruby, Ruby-Devel & Development Tools
-    sudo yum -y install ruby ruby-devel 
+    # Install Ruby & Development Tools
+    sudo yum -y install ruby  
     sudo yum -y groupinstall "Development Tools"
 
-    # Add Rubygems binary directory to PATH
-    echo 'export PATH=$PATH:/usr/local/bin' >> ~/.bashrc
+    # Install Bundler and Rails
+    gem install bundler -y
+
+    # Set GEM_HOME and GEM_PATH
+    echo 'export GEM_HOME=$HOME/.local/share/gem/ruby' >> ~/.bashrc
+    echo 'export GEM_PATH=$GEM_HOME:/usr/share/ruby3.2-gems:/usr/share/gems:/usr/local/share/ruby3.2-gems:/usr/local/share/gems' >> ~/.bashrc
+
+    # Add Ruby gems binary directory to PATH
+    echo 'export PATH=$PATH:$GEM_HOME/bin' >> ~/.bashrc
     source ~/.bashrc
 
-    # Install Bundler and Rails
-    sudo gem install bundler rails -y
+    # Install Rails dependencies
+    sudo yum -y install ruby-devel
+
+    # Install Rails
+    gem install rails 
 
     # Clone the Rails project repository
     sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
