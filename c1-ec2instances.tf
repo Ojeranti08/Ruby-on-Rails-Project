@@ -45,7 +45,7 @@ resource "aws_instance" "RailDocker" {
     sudo yum remove ruby -y
     sudo yum remove ruby-devel -y
     sudo yum install ruby -y
-    sudo yum install ruby-3.2.2-devel -y
+    sudo yum install ruby-devel -y
     sudo gem install rails -v 7.0.4
  
     # Clone the Rails project repository
