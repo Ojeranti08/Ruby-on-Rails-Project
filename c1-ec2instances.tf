@@ -55,7 +55,7 @@ resource "aws_instance" "RailDocker" {
     cd /home/ec2-user/Ruby-on-Rails-Project
 
     # Run docker run command to create a new Rails app
-    Rails new rails-docker --apl --database=postgresql
+    rails new rails-docker --apl --database=postgresql
 
     vi Dockerfile
       user_data              = <<-EOF
