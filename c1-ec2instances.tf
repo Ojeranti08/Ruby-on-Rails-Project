@@ -43,7 +43,7 @@ resource "aws_instance" "RailDocker" {
    sudo yum install ruby-devel -y
 
    # Install Rails
-   sudo gem install rails -v 7.0.4
+   sudo gem install rails -v 6.1.4
  
    # Clone the Rails Project repository
    sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
@@ -105,7 +105,7 @@ resource "aws_instance" "RailDocker" {
 
      ruby '3.2.2'
 
-     gem 'Rails', '7.0.4' # Adjust the version based on my Rails application requirements
+     gem 'Rails', '6.1.4' # Adjust the version based on my Rails application requirements
 
      group :development, :test do
      gem 'sqlite3', '1.4.2' # Use the appropriate database gem and version for development and testing
@@ -121,36 +121,29 @@ resource "aws_instance" "RailDocker" {
    # Change directory to rails-docker
    cd rails-docker
 
-   # Remove Gemfile from the rails-docker directory
-   sudo chown -R ec2-user:ec2-user /home/ec2-user/Ruby-on-Rails-Project/rails-docker
-   sudo chmod 755 /home/ec2-user/Ruby-on-Rails-Project/rails-docker
-   sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/rails-docker/Gemfile
+   # Remove files
+    sudo rm -rf Gemfile \
+        /home/ec2-user/Ruby-on-rails-project/rails-docker/config/database.yaml \
+        /home/ec2-user/Ruby-on-rails-project/rails-docker/config/routes.rb \
+        /home/ec2-user/Ruby-on-rails-project/rails-docker/bin/docker-entrypoint
  
-   # Copy the files from Ruby-on-Rails-Project to the rails-docker directory
-   sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile .
-   sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile .
-   sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml .
-   sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL .
-   sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint bin/
-   sudo cp /home/ec2-user/Ruby-on-Rails-Project/database.yaml config/
-   sudo cp /home/ec2-user/Ruby-on-Rails-Project/routes.rb config/
-   sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock .
-   sudo cp /home/ec2-user/Ruby-on-Rails-Project/data-ignore .
+   # Move the files from Ruby-on-Rails-Project to the rails-docker directory
+    mv /home/ec2-user/Ruby-on-rails-project/Dockerfile \
+        /home/ec2-user/Ruby-on-rails-project/Gemfile \
+        /home/ec2-user/Ruby-on-rails-project/docker-compose.yaml \
+        /home/ec2-user/Ruby-on-rails-project/Dockerfile-PostgresSQL \
+        
+    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/docker-entrypoint \
+        /home/ec2-user/Ruby-on-rails-project/rails-docker/bin
 
-   #sudo chown -R ec2-user:ec2-user .
+    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/database.yaml \
+        /home/ec2-user/Ruby-on-rails-project/rails-docker/config
+
+    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/routes.rb \
+        /home/ec2-user/Ruby-on-rails-project/rails-docker/config
 
    # Change directory to Ruby-on-Rails-Project
-   cd /home/ec2-user/Ruby-on-Rails-Project
-
-   # sudo rm -rf Dockerfile
-   # sudo rm -rf Gemfile 
-   # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/database.yaml
-    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/routes.rb
-    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint
-    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/.env
-    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock
-    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml
-    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL
+   #cd /home/ec2-user/Ruby-on-Rails-Project
 
    # Generate a new secret key
    MASTER_KEY=$(Rails secret)
@@ -159,7 +152,7 @@ resource "aws_instance" "RailDocker" {
    echo "RAILS_MASTER_KEY=$MASTER_KEY" > .env
 
    # Move the .env file to the correct location (rails-docker)
-   sudo cp .env /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
+   sudo mv .env /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
 
    # Change directory to rails-docker
    cd /home/ec2-user/Ruby-on-Rails-Project/rails-docker 
