@@ -118,11 +118,16 @@ resource "aws_instance" "RailDocker" {
       gem 'pg', '1.2.3' # Use the appropriate database gem and version for production (PostgreSQL)
       end 
     
+    # Change directory to Ruby-on-Rails-Project
+    cd /home/ec2-user/Ruby-on-Rails-Project
+
     # Change directory to rails-docker
     cd rails-docker
-    sudo rm -rf Gemfile
 
-    # Copy the files from Ruber-on-Rails-Project to the correct location (rails-docker) 
+    # Remove Gemfile from the rails-docker directory
+    sudo rm -rf Gemfile
+ 
+    # Copy the files from Ruby-on-Rails-Project to the rails-docker directory
     sudo cp ../Dockerfile .
     sudo cp ../Gemfile .
     sudo cp ../docker-compose.yaml .
@@ -134,9 +139,10 @@ resource "aws_instance" "RailDocker" {
     sudo cp ../data-ignore .
 
     sudo chown -R ec2-user:ec2-user .
-    
-    # Change directory to Ruby-on-Rails-Project
-    cd /home/ec2-user/Ruby-on-Rails-Project
+
+  # Change directory to Ruby-on-Rails-Project
+   cd /home/ec2-user/Ruby-on-Rails-Project
+   
     # sudo rm -rf Dockerfile
     # sudo rm -rf Gemfile 
     # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/database.yaml
