@@ -21,19 +21,21 @@ resource "aws_instance" "RailDocker" {
     sudo systemctl start docker
     sudo systemctl enable docker
 
-    # Install Ruby & Development Tools
-    sudo yum -y install ruby  
+    # Install Ruby
+    sudo yum -y install ruby
+
+    # Install Development Tools (optional but recommended for compiling native extensions)
     sudo yum -y groupinstall "Development Tools"
 
-    # Install Bundler and Rails
-    gem install bundler -y
+    # Install Bundler (without -y flag, as gem install doesn't accept it)
+    gem install bundler
 
-    # Install Rails dependencies
+    # Install Ruby development headers (necessary for building certain Ruby gems)
     sudo yum -y install ruby-devel
 
-    # Install Rails
-    gem install rails 
-
+    # Install Rails (without -y flag, as gem install doesn't accept it)
+    gem install rails
+ 
     # Clone the Rails project repository
     sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
 
