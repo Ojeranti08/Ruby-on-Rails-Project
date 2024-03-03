@@ -11,7 +11,7 @@ resource "aws_instance" "RailDocker" {
    sudo yum update -y
 
    # Install necessary packages
-   sudo yum install -y git docker ruby 
+   sudo yum install -y git docker 
 
    # Start Docker service
    sudo systemctl start docker
@@ -22,10 +22,11 @@ resource "aws_instance" "RailDocker" {
    sudo chmod +x /usr/local/bin/docker-compose
 
    # Install Rails
+   sudo yum -y install ruby
    sudo yum -y groupinstall "Development Tools"
    gem install bundler
-   sudo yum install ruby-devel -y
-   sudo gem install rails
+   sudo yum -y install ruby-devel
+   #sudo gem install rails
 
    # Set GEM_HOME and GEM_PATH
    echo 'export GEM_HOME=$HOME/.local/share/gem/ruby' >> ~/.bashrc
