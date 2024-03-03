@@ -11,7 +11,7 @@ resource "aws_instance" "RailDocker" {
    sudo yum update -y
 
    # Install necessary packages
-   sudo yum install -y git docker ruby ruby-devel
+   sudo yum install -y git docker ruby 
 
    # Start Docker service
    sudo systemctl start docker
@@ -22,7 +22,10 @@ resource "aws_instance" "RailDocker" {
    sudo chmod +x /usr/local/bin/docker-compose
 
    # Install Rails
-   sudo gem install rails -v 7.0.4 
+   sudo yum -y groupinstall "Development Tools"
+   gem install bundler
+   sudo yum install ruby-devel -y
+   sudo gem install rails
 
    # Set GEM_HOME and GEM_PATH
    echo 'export GEM_HOME=$HOME/.local/share/gem/ruby' >> ~/.bashrc
@@ -35,7 +38,7 @@ resource "aws_instance" "RailDocker" {
    # Install Rails (without -y flag, as gem install doesn't accept it)
    sudo yum remove ruby -y
    sudo yum remove ruby-devel -y
-   sudo yum install ruby -y
+   sudo yum -y install ruby
    sudo yum install ruby-devel -y
 
    # Install Rails
