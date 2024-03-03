@@ -31,7 +31,7 @@ resource "aws_instance" "RailDocker" {
     gem install bundler
 
     # Install Ruby development headers (necessary for building certain Ruby gems)
-    sudo yum -y install ruby-devel
+    sudo yum install ruby-devel -y 
 
     # Install Rails (without -y flag, as gem install doesn't accept it)
     gem install rails
