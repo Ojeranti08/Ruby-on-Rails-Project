@@ -46,38 +46,115 @@ resource "aws_instance" "RailDocker" {
     sudo yum remove ruby-devel -y
     sudo yum install ruby -y
     sudo yum install ruby-devel -y
-    sudo gem install rails -v 7.0.4
+    sudo gem install Rails -v 7.0.4
  
-    # Clone the Rails project repository
+    # Clone the Rails Project repository
     sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
 
     # Build and run Rails application using Docker Compose
     cd /home/ec2-user/Ruby-on-Rails-Project
 
+    vi Dockerfile
+      user_data              = <<-EOF
+    #!/bin/bash
+    # Make sure it matches the Ruby version in .ruby-version and Gemfile
+    ARG RUBY_VERSION=3.2.0
+    FROM ruby:$RUBY_VERSION
+
+    # Install libvips for Active Storage preview support
+    RUN yum update -qq && \
+    yum install -y build-essential libvips bash bash-completion libffi-dev tzdata postgresql nodejs npm yarn && \
+    yum clean && \
+    rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man
+
+    # Rails app lives here
+    WORKDIR /Rails
+
+    # Set production environment
+    ENV RAILS_LOG_TO_STDOUT="1" \
+    RAILS_SERVE_STATIC_FILES="true" \
+    RAILS_ENV="production" \
+    BUNDLE_WITHOUT="development"
+
+    # Install application gems
+    COPY Gemfile Gemfile.lock ./
+    RUN bundle install
+
+    # Copy application code
+    COPY . .
+
+    # Precompile bootsnap code for faster boot times
+    RUN bundle exec bootsnap precompile --gemfile app/ lib/
+
+    # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+    RUN SECRET_KEY_BASE_DUMMY=1 bundle exec Rails assets:precompile
+
+    # Entrypoint prepares the database.
+    ENTRYPOINT ["/Rails/bin/docker-entrypoint"]
+
+    # Start the server by default, this can be overwritten at runtime
+    EXPOSE 3000
+    CMD ["./bin/Rails", "server"]
+
+    vi Gemfile
+      user_data            = <<-EOF
+      # Gemfile
+
+      source 'https://rubygems.org'
+
+      ruby '3.2.2'
+
+      gem 'Rails', '7.0.4' # Adjust the version based on my Rails application requirements
+
+      group :development, :test do
+      gem 'sqlite3', '1.4.2' # Use the appropriate database gem and version for development and testing
+      end
+
+      group :production do
+      gem 'pg', '1.2.3' # Use the appropriate database gem and version for production (PostgreSQL)
+      end 
+
     # Run docker run command to create a new Rails app
-    rails new rails-docker --apl --database=postgresql
+    Rails new rails-docker --apl --database=postgresql
     
     # Change directory to rails-docker
-    cd /home/ec2-user/Ruby-on-rails-project/rails-docker
+    cd /home/ec2-user/Ruby-on-Rails-Project/rails-docker
 
-    # Move the files from Ruber-on-rails-project to the correct location (rails-docker) 
-    sudo mv /home/ec2-user/Ruby-on-rails-project/Dockerfile .
-    sudo mv /home/ec2-user/Ruby-on-rails-project/Gemfile .
-    sudo mv /home/ec2-user/Ruby-on-rails-project/docker-compose.yaml .
-    sudo mv /home/ec2-user/Ruby-on-rails-project/dockerfile.postgres .
-    sudo mv /home/ec2-user/Ruby-on-rails-project/docker-entrypoint /home/ec2-user/Ruby-on-rails-project/rails-docker/bin
-    sudo mv /home/ec2-user/Ruby-on-rails-project/database.yaml /home/ec2-user/Ruby-on-rails-project/rails-docker/config
-    sudo mv /home/ec2-user/Ruby-on-rails-project/routes.rb /home/ec2-user/Ruby-on-rails-project/rails-docker/config
-    sudo mv /home/ec2-user/Ruby-on-rails-project/.env /home/ec2-user/Ruby-on-rails-project/rails-docker
-    
-    cd /home/ec2-user/Ruby-on-rails-project
+    # Move the files from Ruber-on-Rails-Project to the correct location (rails-docker) 
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile .
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile .
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml .
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL .
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint /home/ec2-user/Ruby-on-Rails-Project/rails-docker/bin
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/database.yaml /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/routes.rb /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/.env .
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock ..
+    sudo cp /home/ec2-user/Ruby-on-Rails-Project/data-ignore .
+
+    # Change directory to Ruby-on-Rails-Project
+    cd /home/ec2-user/Ruby-on-Rails-Project
     sudo rm -rf Dockerfile
     sudo rm -rf Gemfile 
-    sudo rm -rf /home/ec2-user/Ruby-on-rails-project/database.yaml
-    sudo rm -rf /home/ec2-user/Ruby-on-rails-project/routes.rb
-    sudo rm -rf /home/ec2-user/Ruby-on-rails-project/docker-entrypoint
+    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/database.yaml
+    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/routes.rb
+    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint
+    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/.env
+    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock
+    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml
+    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL
 
-    cd /home/ec2-user/Ruby-on-rails-project/rails-docker 
+    # Generate a new secret key
+    MASTER_KEY=$(Rails secret)
+
+    # Create a new .env file with the new secret key
+    echo "RAILS_MASTER_KEY=$MASTER_KEY" > .env
+
+    # Move the .env file to the correct location (rails-docker)
+    sudo cp .env /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
+
+    # Change directory to rails-docker
+    cd /home/ec2-user/Ruby-on-Rails-Project/rails-docker 
 
     # Print the master.key
     echo "RAILS_MASTER_KEY=$MASTER_KEY"
@@ -85,7 +162,7 @@ resource "aws_instance" "RailDocker" {
     # Save the master.key to a .env file
     echo "RAILS_MASTER_KEY=$MASTER_KEY" > .env
 
-    rails g scaffold post title body:text
+    Rails g scaffold post title body:text
 
     # Build and run the containers
     docker-compose up --build
