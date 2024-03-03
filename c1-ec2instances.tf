@@ -26,7 +26,7 @@ resource "aws_instance" "RailDocker" {
     sudo yum -y groupinstall "Development Tools"
 
     # Install Bundler and Rails
-    sudo gem install bundler rails
+    sudo gem install bundler rails -y
 
     # Clone the Rails project repository
     sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
