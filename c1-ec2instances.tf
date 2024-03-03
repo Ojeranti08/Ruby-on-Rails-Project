@@ -21,9 +21,13 @@ resource "aws_instance" "RailDocker" {
     sudo systemctl start docker
     sudo systemctl enable docker
 
-    # Install Ruby, RubyGems, Ruby-Devel & Development Tools
-    sudo yum -y install ruby ruby-devel rubygems
+    # Install Ruby, Ruby-Devel & Development Tools
+    sudo yum -y install ruby ruby-devel 
     sudo yum -y groupinstall "Development Tools"
+
+    # Add Rubygems binary directory to PATH
+    echo 'export PATH=$PATH:/usr/local/bin' >> ~/.bashrc
+    source ~/.bashrc
 
     # Install Bundler and Rails
     sudo gem install bundler rails -y
