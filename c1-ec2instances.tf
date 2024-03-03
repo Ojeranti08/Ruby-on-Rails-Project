@@ -46,7 +46,7 @@ resource "aws_instance" "RailDocker" {
     sudo yum remove ruby-devel -y
     sudo yum install ruby -y
     sudo yum install ruby-devel -y
-    sudo gem install Rails -v 7.0.4
+    sudo gem install rails -v 7.0.4
  
     # Clone the Rails Project repository
     sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
@@ -96,7 +96,7 @@ resource "aws_instance" "RailDocker" {
     EXPOSE 3000
     CMD ["./bin/Rails", "server"]
    
-   
+
     vi Gemfile
       user_data            = <<-EOF
       # Gemfile
@@ -129,21 +129,20 @@ resource "aws_instance" "RailDocker" {
     sudo cp /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint /home/ec2-user/Ruby-on-Rails-Project/rails-docker/bin
     sudo cp /home/ec2-user/Ruby-on-Rails-Project/database.yaml /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
     sudo cp /home/ec2-user/Ruby-on-Rails-Project/routes.rb /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
-    sudo cp /home/ec2-user/Ruby-on-Rails-Project/.env .
     sudo cp /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock ..
     sudo cp /home/ec2-user/Ruby-on-Rails-Project/data-ignore .
 
     # Change directory to Ruby-on-Rails-Project
     cd /home/ec2-user/Ruby-on-Rails-Project
-    sudo rm -rf Dockerfile
-    sudo rm -rf Gemfile 
-    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/database.yaml
-    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/routes.rb
-    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint
-    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/.env
-    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock
-    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml
-    sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL
+    # sudo rm -rf Dockerfile
+    # sudo rm -rf Gemfile 
+    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/database.yaml
+    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/routes.rb
+    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint
+    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/.env
+    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock
+    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml
+    # sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL
 
     # Generate a new secret key
     MASTER_KEY=$(Rails secret)
