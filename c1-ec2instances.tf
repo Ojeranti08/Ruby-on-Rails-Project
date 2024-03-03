@@ -120,10 +120,10 @@ resource "aws_instance" "RailDocker" {
    
    # Change directory to rails-docker
    cd rails-docker
-   sudo chown -R ec2-user:ec2-user .
 
    # Remove Gemfile from the rails-docker directory
-   rm -rf Gemfile
+   sudo chown -R ec2-user:ec2-user /home/ec2-user/Ruby-on-Rails-Project/rails-docker
+   sudo rm -rf /home/ec2-user/Ruby-on-Rails-Project/rails-docker/Gemfile
  
    # Copy the files from Ruby-on-Rails-Project to the rails-docker directory
    sudo cp /home/ec2-user/Ruby-on-Rails-Project/Dockerfile .
