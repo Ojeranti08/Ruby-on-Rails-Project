@@ -54,6 +54,9 @@ resource "aws_instance" "RailDocker" {
     # Build and run Rails application using Docker Compose
     cd /home/ec2-user/Ruby-on-Rails-Project
 
+    # Run docker run command to create a new Rails app
+    Rails new rails-docker --apl --database=postgresql
+
     vi Dockerfile
       user_data              = <<-EOF
     #!/bin/bash
@@ -114,9 +117,6 @@ resource "aws_instance" "RailDocker" {
       group :production do
       gem 'pg', '1.2.3' # Use the appropriate database gem and version for production (PostgreSQL)
       end 
-
-    # Run docker run command to create a new Rails app
-    Rails new rails-docker --apl --database=postgresql
     
     # Change directory to rails-docker
     cd /home/ec2-user/Ruby-on-Rails-Project/rails-docker
