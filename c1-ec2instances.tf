@@ -41,40 +41,40 @@ resource "aws_instance" "RailDocker" {
    # Clone the Rails Project repository
    sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
 
-   cd /home/ec2-user/Ruby-on-rails-project
+   cd /home/ec2-user/Ruby-on-Rails-Project
 
     # Run docker run command to create a new Rails app
     rails new rails-docker --apl --database=postgresql
 
-    cd /home/ec2-user/Ruby-on-rails-project/rails-docker
+    cd /home/ec2-user/Ruby-on-Rails-Project/rails-docker
 
     # Remove files
     sudo rm -rf Dockerfile Gemfile \
-        /home/ec2-user/Ruby-on-rails-project/rails-docker/config/database.yaml \
-        /home/ec2-user/Ruby-on-rails-project/rails-docker/config/routes.rb \
-        /home/ec2-user/Ruby-on-rails-project/rails-docker/bin/docker-entrypoint
+        /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config/database.yaml \
+        /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config/routes.rb \
+        /home/ec2-user/Ruby-on-Rails-Project/rails-docker/bin/docker-entrypoint
 
     # Move files
-    mv /home/ec2-user/Ruby-on-rails-project/Dockerfile \
-        /home/ec2-user/Ruby-on-rails-project/env \
-        /home/ec2-user/Ruby-on-rails-project/.ruby-version \
-        /home/ec2-user/Ruby-on-rails-project/docker-entrypoint \
-        /home/ec2-user/Ruby-on-rails-project/database.yaml \
-        /home/ec2-user/Ruby-on-rails-project/routes.rb \
-        /home/ec2-user/Ruby-on-rails-project/Gemfile \
-        /home/ec2-user/Ruby-on-rails-project/Gemfile.lock \
-        /home/ec2-user/Ruby-on-rails-project/docker-compose.yaml \
-        /home/ec2-user/Ruby-on-rails-project/Dockerfile-PostgresSQL \
+    mv /home/ec2-user/Ruby-on-Rails-Project/Dockerfile \
+        /home/ec2-user/Ruby-on-Rails-Project/env \
+        /home/ec2-user/Ruby-on-Rails-Project/.ruby-version \
+        /home/ec2-user/Ruby-on-Rails-Project/docker-entrypoint \
+        /home/ec2-user/Ruby-on-Rails-Project/database.yaml \
+        /home/ec2-user/Ruby-on-Rails-Project/routes.rb \
+        /home/ec2-user/Ruby-on-Rails-Project/Gemfile \
+        /home/ec2-user/Ruby-on-Rails-Project/Gemfile.lock \
+        /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml \
+        /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL \
         .
     # Move and rename files
-    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/docker-entrypoint \
-        /home/ec2-user/Ruby-on-rails-project/rails-docker/bin
+    mv /home/ec2-user/rails-docker/Ruby-on-Rails-Project/docker-entrypoint \
+        /home/ec2-user/Ruby-on-Rails-Project/rails-docker/bin
 
-    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/database.yaml \
-        /home/ec2-user/Ruby-on-rails-project/rails-docker/config
+    mv /home/ec2-user/rails-docker/Ruby-on-Rails-Project/database.yaml \
+        /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
 
-    mv /home/ec2-user/rails-docker/Ruby-on-rails-project/routes.rb \
-        /home/ec2-user/Ruby-on-rails-project/rails-docker/config
+    mv /home/ec2-user/rails-docker/Ruby-on-Rails-Project/routes.rb \
+        /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
 
 
     # Print the master.key
