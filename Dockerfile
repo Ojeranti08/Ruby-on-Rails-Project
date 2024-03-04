@@ -1,12 +1,12 @@
 # Make sure it matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.2.0
-FROM ruby:$RUBY_VERSION
+ARG RUBY_VERSION=3.2.2
+FROM ruby:$RUBY-VERSION
 
 # Install libvips for Active Storage preview support
-RUN yum update -qq && \
-    yum install -y build-essential libvips bash bash-completion libffi-dev tzdata postgresql nodejs npm yarn && \
-    yum clean && \
-    rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man
+RUN apk update -qq && \
+    apk upgrade && \
+    apk add --no-cache build-base libvips bash bash-completion libffi-dev tzdata postgresql nodejs npm yarn && \
+    rm -rf /var/cache/apk/*
 
 # Rails app lives here
 WORKDIR /rails
