@@ -21,34 +21,27 @@ resource "aws_instance" "RailDocker" {
    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
    sudo chmod +x /usr/local/bin/docker-compose
 
-   # Install Rails
+   # Install Ruby and other dependencies
+   sudo yum update -y
+   sudo yum install git -y
    sudo yum -y install ruby
    sudo yum -y groupinstall "Development Tools"
-   gem install bundler
+   sudo gem install bundler
+   gem update --system
    sudo yum -y install ruby-devel
-   #sudo gem install rails
-
-   
-   # Install Rails (without -y flag, as gem install doesn't accept it)
-   sudo yum remove ruby -y
-   sudo yum remove ruby-devel -y
-   sudo yum -y install ruby
-   sudo yum install ruby-devel -y
-
-   # Install Rails
-   sudo gem install rails -v 7.0.4
+   gem install rails -v 7.0.4
 
    # Clone the Rails Project repository
    sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
 
    cd /home/ec2-user/Ruby-on-Rails-Project
 
-    # Run docker run command to create a new Rails app
-    rails new rails-docker --apl --database=postgresql
+   # Run docker run command to create a new Rails app
+   rails new rails-docker --apl --database=postgresql
 
-    cd /home/ec2-user/Ruby-on-Rails-Project/rails-docker
+   cd /home/ec2-user/Ruby-on-Rails-Project/rails-docker
 
-    # Remove files
+   # Remove files
     sudo rm -rf Dockerfile Gemfile \
         /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config/database.yaml \
         /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config/routes.rb \
@@ -77,17 +70,17 @@ resource "aws_instance" "RailDocker" {
         /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
 
 
-    # Print the master.key
-    echo "RAILS_MASTER_KEY=$MASTER_KEY"
+   # Print the master.key
+   echo "RAILS_MASTER_KEY=$MASTER_KEY"
 
-    # Save the master.key to a env file
-    echo "RAILS_MASTER_KEY=$MASTER_KEY" > env
+   # Save the master.key to a env file
+   echo "RAILS_MASTER_KEY=$MASTER_KEY" > env
 
-    # Generate the scaffold for the "Post" model
-    rails g scaffold post title body:text
+   # Generate the scaffold for the "Post" model
+   rails g scaffold post title body:text
 
-    # Build and run the containers
-    docker-compose build && docker-compose up
+   # Build and run the containers
+   docker-compose build && docker-compose up
   EOF
 
   private_ip = "10.0.1.18"
