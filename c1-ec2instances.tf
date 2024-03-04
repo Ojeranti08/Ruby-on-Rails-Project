@@ -34,6 +34,7 @@ resource "aws_instance" "RailDocker" {
    sudo yum -y install postgresql
    sudo yum -y install sqlite-devel
    bundle install
+   bundle install --gemfile
 
    # Clone the Rails Project repository
    sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
