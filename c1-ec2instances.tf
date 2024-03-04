@@ -43,7 +43,7 @@ resource "aws_instance" "RailDocker" {
    sudo yum install ruby-devel -y
 
    # Install Rails
-   sudo gem install rails -v 6.1.4
+   sudo gem install rails -v 7.0.4
  
    # Clone the Rails Project repository
    sudo git clone https://github.com/Ojeranti08/Ruby-on-Rails-Project.git /home/ec2-user/Ruby-on-Rails-Project
@@ -58,7 +58,7 @@ resource "aws_instance" "RailDocker" {
     user_data              = <<-EOF
      #!/bin/bash
      # Make sure it matches the Ruby version in .ruby-version and Gemfile
-     ARG RUBY_VERSION=3.2.0
+     ARG RUBY_VERSION=3.2.2
      FROM ruby:$RUBY_VERSION
 
      # Install libvips for Active Storage preview support
@@ -105,7 +105,7 @@ resource "aws_instance" "RailDocker" {
 
      ruby '3.2.2'
 
-     gem 'Rails', '6.1.4' # Adjust the version based on my Rails application requirements
+     gem 'Rails', '7.0.4' # Adjust the version based on my Rails application requirements
 
      group :development, :test do
      gem 'sqlite3', '1.4.2' # Use the appropriate database gem and version for development and testing
