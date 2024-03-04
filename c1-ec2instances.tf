@@ -143,7 +143,7 @@ resource "aws_instance" "RailDocker" {
         /home/ec2-user/Ruby-on-rails-project/rails-docker/config
 
    # Change directory to Ruby-on-Rails-Project
-   #cd /home/ec2-user/Ruby-on-Rails-Project
+   cd /home/ec2-user/Ruby-on-Rails-Project
 
    # Generate a new secret key
    MASTER_KEY=$(Rails secret)
@@ -166,7 +166,7 @@ resource "aws_instance" "RailDocker" {
    Rails g scaffold post title body:text
 
    # Build and run the containers
-   docker-compose up --build
+   docker-compose build && docker-compose up
   EOF
 
   private_ip = "10.0.1.18"
