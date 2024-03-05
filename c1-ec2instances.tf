@@ -29,7 +29,7 @@ resource "aws_instance" "RailDocker" {
    sudo gem install bundler
    gem update --system
    sudo yum -y install ruby-devel
-   gem install rails -v 7.0.4
+   gem install rails*
    sudo yum -y install postgresql-devel
    sudo yum -y install postgresql
    sudo yum -y install sqlite-devel
@@ -64,6 +64,10 @@ resource "aws_instance" "RailDocker" {
         /home/ec2-user/Ruby-on-Rails-Project/docker-compose.yaml \
         /home/ec2-user/Ruby-on-Rails-Project/Dockerfile-PostgresSQL \
         .
+
+    mv   /home/ec2-user/Ruby-on-Rails-Project/boot.rb \
+        /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
+
     # Move and rename files
     mv /home/ec2-user/rails-docker/Ruby-on-Rails-Project/docker-entrypoint \
         /home/ec2-user/Ruby-on-Rails-Project/rails-docker/bin
@@ -73,7 +77,10 @@ resource "aws_instance" "RailDocker" {
 
     mv /home/ec2-user/rails-docker/Ruby-on-Rails-Project/routes.rb \
         /home/ec2-user/Ruby-on-Rails-Project/rails-docker/config
-
+   
+   sudo chown ec2-user:ec2-user /home/ec2-user/Ruby-on-Rails-Project/rails-docker/Gemfile.lock
+   sudo chmod +w /home/ec2-user/Ruby-on-Rails-Project/rails-docker/Gemfile.lock
+   bundle install
 
    # Print the master.key
    echo "RAILS_MASTER_KEY=$MASTER_KEY"
