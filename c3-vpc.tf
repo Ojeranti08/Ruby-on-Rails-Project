@@ -76,7 +76,6 @@ resource "aws_route_table_association" "raildocker-private-route-table-associate
 
 # Elastic IP for NAT Gateway
 resource "aws_eip" "nat" {
-  vpc = true
   tags = {
     Name = "Rail-Docker-eip_NAT"
   }
