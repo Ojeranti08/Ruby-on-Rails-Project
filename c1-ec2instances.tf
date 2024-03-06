@@ -29,7 +29,7 @@ resource "aws_instance" "RailDocker" {
    sudo gem install bundler
    gem update --system
    sudo yum -y install ruby-devel
-   gem install rails 6.1.4
+   gem install rails -v 6.1.4
    sudo yum -y install postgresql-devel
    sudo yum -y install postgresql
    sudo yum -y install sqlite-devel
