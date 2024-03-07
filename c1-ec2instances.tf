@@ -8,7 +8,7 @@ resource "aws_instance" "RailDocker" {
    #!/bin/bash
 
    # Update the system
-   #sudo yum update -y
+   sudo yum update -y
 
    # Install necessary packages
    sudo yum install -y git docker 
@@ -22,7 +22,7 @@ resource "aws_instance" "RailDocker" {
    sudo chmod +x /usr/local/bin/docker-compose
 
    # Install Ruby and other dependencies
-   # sudo yum update -y
+   sudo yum update -y
    sudo yum install git -y
    sudo yum -y install ruby -v 3.2.0
    sudo yum -y groupinstall "Development Tools"
