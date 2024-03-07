@@ -22,11 +22,9 @@ resource "aws_instance" "RailDocker" {
    sudo chmod +x /usr/local/bin/docker-compose
 
    # Install Ruby and other dependencies
-   sudo yum update -y
-   sudo yum install git -y
-   sudo yum -y install ruby -v 3.2.0
+   sudo yum -y install ruby 
    sudo yum -y groupinstall "Development Tools"
-   sudo gem install bundler
+   #sudo gem install bundler
    gem update --system
    sudo yum -y install ruby-devel
    gem install rails -v 6.1.4
