@@ -24,7 +24,7 @@ resource "aws_instance" "RailDocker" {
    # Install Ruby and other dependencies
    sudo yum -y install ruby 
    sudo yum -y groupinstall "Development Tools"
-   #sudo gem install bundler
+   sudo gem install bundler y
    gem update --system
    sudo yum -y install ruby-devel
    gem install rails -v 6.1.4
