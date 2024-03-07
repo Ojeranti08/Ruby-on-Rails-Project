@@ -1,8 +1,8 @@
 resource "aws_instance" "RailDocker" {
-  ami                    = "ami-0440d3b780d96b29d"
+  ami                    = "ami-002070d43b0a4f171"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.raildocker-public-subnet.id
-  key_name               = "Oje"
+  key_name               = "Kemi"
   vpc_security_group_ids = [aws_security_group.raildocker-sg.id]
   user_data              = <<-EOF
    #!/bin/bash
